@@ -27,9 +27,9 @@ public class Main {
                     "X) Exit\n\n" +
                     "Choose an option: ");
             String command = scanner.nextLine();
-            switch (command) {
-                case "d","D" -> addDeposit();
-//                case "p","P" -> makePayment();
+            switch (command.toUpperCase()) {
+                case "D" -> addDeposit();
+                case "p","P" -> makePayment();
 //                case "l","L" -> ledgerScreen();
                 case "x","X" -> {
                     System.out.println("Have a nice day!");
@@ -68,6 +68,39 @@ public class Main {
         String formattedTime = time.format(timeFormat);
         bufferedWriter.write("\n" + formattedDate + "|" + formattedTime
         + "|" + description + "|" + vendor + "|" + formattedAmount);
+        bufferedWriter.close();
+    }
+
+    public static void makePayment() throws IOException {
+        Scanner scanner = new Scanner(System.in);
+        FileWriter fileWriter = new FileWriter("transactions.csv",true);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm:ss");
+        System.out.println("What is the reason for this payment? ");
+        String description = scanner.nextLine();
+        System.out.println("Who is the vendor? ");
+        String vendor = scanner.nextLine();
+        String formattedAmount;
+        while (true) {
+            System.out.println("How much is the payment? ");
+            if (scanner.hasNextDouble()){
+                double amount = scanner.nextDouble();
+                amount *= -1;
+                formattedAmount = String.format("%.2f",amount);
+                break;
+            } else {
+                System.out.println("Invalid Input. Try Again");
+                scanner.next();
+            }
+        }
+        scanner.nextLine();
+        LocalDateTime date = LocalDateTime.now();
+        LocalDateTime time = LocalDateTime.now();
+        String formattedDate = date.format(dateFormat);
+        String formattedTime = time.format(timeFormat);
+        bufferedWriter.write("\n" + formattedDate + "|" + formattedTime
+                + "|" + description + "|" + vendor + "|" + formattedAmount);
         bufferedWriter.close();
     }
 }
