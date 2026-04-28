@@ -108,7 +108,7 @@ public class Main {
                 case "A" -> allEntries(ledger);
                 case "D" -> deposits(ledger);
                 case "P" -> payments(ledger);
-//                case "R" -> reports(ledger);
+                case "R" -> reportsScreen(ledger);
                 case "H" -> {
                     System.out.println("Going back to Home Screen\n");
                     return;
@@ -148,6 +148,62 @@ public class Main {
         }
         Collections.reverse(paymentLedger);
         for (Transaction transaction : paymentLedger){
+            transaction.printInfo();
+        }
+    }
+
+    public static void reportsScreen(ArrayList<Transaction> ledger){
+        Scanner scanner = new Scanner(System.in);
+        while (true){
+
+            System.out.print("-----Reports Screen-----\n\n\t" +
+                    "1) Month to Date\n\t" +
+                    "2) Previous Month\n\t" +
+                    "3) Year to Date\n\t" +
+                    "4) Previous Year\n\t" +
+                    "5) Search by Vendor\n\t" +
+                    "0) Back\n\n" +
+                    "Choose an option: ");
+            int command = scanner.nextInt();
+            scanner.nextLine();
+            switch (command) {
+                case 1 -> monthToDate(ledger);
+//                case 2 -> previousMonth(ledger);
+                case 3 -> yearToDate(ledger);
+//                case 4 -> previousYear(ledger);
+//                case 5 -> searchByVendor(ledger);
+                case 0 -> {
+                    System.out.println("Going back to Ledger Screen\n");
+                    return;
+                }
+            }
+        }
+    }
+
+    public static void monthToDate(ArrayList<Transaction> ledger){
+        ArrayList<Transaction> thisMonth = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+        for (Transaction transaction : ledger){
+            if (transaction.getDate().getMonth() == today.getMonth() && transaction.getDate().getYear() == today.getYear()){
+                thisMonth.add(transaction);
+            }
+        }
+        Collections.reverse(thisMonth);
+        for (Transaction transaction : thisMonth){
+            transaction.printInfo();
+        }
+    }
+
+    public static void yearToDate(ArrayList<Transaction> ledger){
+        ArrayList<Transaction> thisYear = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+        for (Transaction transaction : ledger){
+            if (transaction.getDate().getYear() == today.getYear()){
+                thisYear.add(transaction);
+            }
+        }
+        Collections.reverse(thisYear);
+        for (Transaction transaction : thisYear){
             transaction.printInfo();
         }
     }
