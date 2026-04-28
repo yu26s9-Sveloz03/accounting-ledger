@@ -162,6 +162,7 @@ public class Main {
                     "3) Year to Date\n\t" +
                     "4) Previous Year\n\t" +
                     "5) Search by Vendor\n\t" +
+                    "6) Custom Search\n\t" +
                     "0) Back\n\n" +
                     "Choose an option: ");
             int command = scanner.nextInt();
@@ -171,7 +172,8 @@ public class Main {
                 case 2 -> previousMonth(ledger);
                 case 3 -> yearToDate(ledger);
                 case 4 -> previousYear(ledger);
-//                case 5 -> searchByVendor(ledger);
+                case 5 -> searchByVendor(ledger);
+                case 6 -> customSearch(ledger);
                 case 0 -> {
                     System.out.println("Going back to Ledger Screen\n");
                     return;
@@ -234,6 +236,78 @@ public class Main {
         for (Transaction transaction : thisYear){
             transaction.printInfo();
         }
+    }
+
+    public static void searchByVendor(ArrayList<Transaction> ledger){
+        String vendor = Console.promptForString("What is the name of the vendor? ");
+        ArrayList<Transaction> vendorList = new ArrayList<>();
+        for (Transaction transaction : ledger){
+            if (transaction.getVendor().equalsIgnoreCase(vendor)){
+                vendorList.add(transaction);
+            }
+        }
+        Collections.reverse(vendorList);
+        for (Transaction transaction : vendorList){
+            transaction.printInfo();
+        }
+    }
+
+    public static void customSearch(ArrayList<Transaction> ledger){
+        String startDate = Console.promptForString("What is the start date? (yyyy-mm-dd) ");
+        String endDate = Console.promptForString("What is the end date? (yyyy-mm-dd) ");
+        String description = Console.promptForString("What is the description? ");
+        String vendor = Console.promptForString("What is the vendor? ");
+        double amount = Console.promptForDouble("What is the amount? (Enter 0 to not search by price) ");
+//        double numAmount = Double.parseDouble(amount);
+        ArrayList<Transaction> custom = new ArrayList<>();
+        if (!startDate.isEmpty() && !endDate.isEmpty()){
+            for (Transaction transaction : ledger){
+                if (transaction.getDate().isAfter(LocalDate.parse(startDate)) && transaction.getDate().isBefore(LocalDate.parse(endDate))){
+                    custom.add(transaction);
+                }
+            }
+        } else if (!startDate.isBlank()){
+            for (Transaction transaction : ledger){
+                if (transaction.getDate().isAfter(LocalDate.parse(startDate))){
+                    custom.add(transaction);
+                }
+            }
+        } else if (!endDate.isBlank()){
+            for (Transaction transaction : ledger){
+                if (transaction.getDate().isBefore(LocalDate.parse(startDate))){
+                    custom.add(transaction);
+                }
+            }
+        }
+
+        if (!description.isBlank()){
+            for (Transaction transaction : ledger){
+                if (transaction.getDescription().equalsIgnoreCase(description)){
+                    custom.add(transaction);
+                }
+            }
+        }
+
+        if (!vendor.isBlank()){
+            for (Transaction transaction : ledger){
+                if (transaction.getVendor().equalsIgnoreCase(vendor)){
+                    custom.add(transaction);
+                }
+            }
+        }
+
+        if (!(amount == 0.0)){
+            for (Transaction transaction : ledger){
+                if (transaction.getAmount() == amount){
+                    custom.add(transaction);
+                }
+            }
+        }
+        Collections.reverse(custom);
+        for ( Transaction transaction : custom){
+            transaction.printInfo();
+        }
+
     }
 
     public static void loadTransactions(ArrayList<Transaction> ledger){
