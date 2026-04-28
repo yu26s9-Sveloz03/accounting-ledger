@@ -168,9 +168,9 @@ public class Main {
             scanner.nextLine();
             switch (command) {
                 case 1 -> monthToDate(ledger);
-//                case 2 -> previousMonth(ledger);
+                case 2 -> previousMonth(ledger);
                 case 3 -> yearToDate(ledger);
-//                case 4 -> previousYear(ledger);
+                case 4 -> previousYear(ledger);
 //                case 5 -> searchByVendor(ledger);
                 case 0 -> {
                     System.out.println("Going back to Ledger Screen\n");
@@ -190,6 +190,34 @@ public class Main {
         }
         Collections.reverse(thisMonth);
         for (Transaction transaction : thisMonth){
+            transaction.printInfo();
+        }
+    }
+
+    public static void previousMonth(ArrayList<Transaction> ledger){
+        ArrayList<Transaction> prevMonth = new ArrayList<>();
+        LocalDate lastMonth = LocalDate.now().minusMonths(1);
+        for (Transaction transaction : ledger){
+            if (transaction.getDate().getMonth() == lastMonth.getMonth() && transaction.getDate().getYear() == lastMonth.getYear()){
+                prevMonth.add(transaction);
+            }
+        }
+        Collections.reverse(prevMonth);
+        for (Transaction transaction : prevMonth){
+            transaction.printInfo();
+        }
+    }
+
+    public static void previousYear(ArrayList<Transaction> ledger){
+        ArrayList<Transaction> prevYear = new ArrayList<>();
+        LocalDate lastYear = LocalDate.now().minusYears(1);
+        for (Transaction transaction : ledger){
+            if (transaction.getDate().getYear() == lastYear.getYear()){
+                prevYear.add(transaction);
+            }
+        }
+        Collections.reverse(prevYear);
+        for (Transaction transaction : prevYear){
             transaction.printInfo();
         }
     }
