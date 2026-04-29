@@ -259,11 +259,11 @@ public class Main {
         String vendor = Console.promptForString("What is the vendor? ");
         double amount = Console.promptForDouble("What is the amount? (Enter 0 to not search by price) ");
 //        double numAmount = Double.parseDouble(amount);
-        ArrayList<Transaction> custom = new ArrayList<>();
+        ArrayList<Transaction> custom = ledger;
         if (!startDate.isEmpty() && !endDate.isEmpty()){
-            for (Transaction transaction : ledger){
-                if (transaction.getDate().isAfter(LocalDate.parse(startDate)) && transaction.getDate().isBefore(LocalDate.parse(endDate))){
-                    custom.add(transaction);
+            for (int i = 0; i < custom.size(); i++){
+                if (!(custom.get(i).getDate().isAfter(LocalDate.parse(startDate)) && custom.get(i).getDate().isBefore(LocalDate.parse(endDate)))){
+                    custom.remove(custom.get(i));
                 }
             }
         } else if (!startDate.isBlank()){
