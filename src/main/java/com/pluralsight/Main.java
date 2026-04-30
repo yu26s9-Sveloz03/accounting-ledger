@@ -257,7 +257,7 @@ public class Main {
         String endDate = Console.promptForString("What is the end date? (yyyy-mm-dd) ");
         String description = Console.promptForString("What is the description? ");
         String vendor = Console.promptForString("What is the vendor? ");
-        double amount = Console.promptForDouble("What is the amount? (Enter 0 to not search by price) ");
+        String amount = Console.promptForString("What is the amount? ");
         //todo: search google on how to copy an arraylist without a reference.
         ArrayList<Transaction> custom = new ArrayList<>(ledger);
         if (!startDate.isBlank()) {
@@ -304,9 +304,9 @@ public class Main {
             }
         }
 
-        if (!(amount == 0.0)){
+        if (!(amount.isBlank())){
             for (int i = 0; i < custom.size(); i++){
-                if (!(custom.get(i).getAmount() == amount)){
+                if (!(custom.get(i).getAmount() == Double.parseDouble(amount))){
                     custom.remove(custom.get(i));
                     i--;
                 }
