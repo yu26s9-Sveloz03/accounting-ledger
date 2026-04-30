@@ -258,48 +258,57 @@ public class Main {
         String description = Console.promptForString("What is the description? ");
         String vendor = Console.promptForString("What is the vendor? ");
         double amount = Console.promptForDouble("What is the amount? (Enter 0 to not search by price) ");
-//        double numAmount = Double.parseDouble(amount);
-        ArrayList<Transaction> custom = ledger;
-        if (!startDate.isEmpty() && !endDate.isEmpty()){
-            for (int i = 0; i < custom.size(); i++){
-                if (!(custom.get(i).getDate().isAfter(LocalDate.parse(startDate)) && custom.get(i).getDate().isBefore(LocalDate.parse(endDate)))){
+        //todo: search google on how to copy an arraylist without a reference.
+        ArrayList<Transaction> custom = new ArrayList<>(ledger);
+        if (!startDate.isBlank()) {
+            for (int i = 0; i < custom.size(); i++) {
+                if (!custom.get(i).getDate().isAfter(LocalDate.parse(startDate))) {
                     custom.remove(custom.get(i));
+                    i--;
                 }
             }
-        } else if (!startDate.isBlank()){
-            for (Transaction transaction : ledger){
-                if (transaction.getDate().isAfter(LocalDate.parse(startDate))){
-                    custom.add(transaction);
-                }
-            }
-        } else if (!endDate.isBlank()){
-            for (Transaction transaction : ledger){
-                if (transaction.getDate().isBefore(LocalDate.parse(startDate))){
-                    custom.add(transaction);
+        }
+        // 0, 1, 2, 3, 4
+        // 0 apples
+        // 1 oranges
+        //
+        // 2 banana
+        //
+        // 3 raspberry
+        // 4 grapes
+
+        if (!endDate.isBlank()){
+            for (int i = 0; i < custom.size(); i++){
+                if (!custom.get(i).getDate().isBefore(LocalDate.parse(endDate))){
+                    custom.remove(custom.get(i));
+                    i--;
                 }
             }
         }
 
         if (!description.isBlank()){
-            for (Transaction transaction : ledger){
-                if (transaction.getDescription().equalsIgnoreCase(description)){
-                    custom.add(transaction);
+            for (int i = 0; i < custom.size(); i++){
+                if (!custom.get(i).getDescription().equalsIgnoreCase(description)){
+                    custom.remove(custom.get(i));
+                    i--;
                 }
             }
         }
 
         if (!vendor.isBlank()){
-            for (Transaction transaction : ledger){
-                if (transaction.getVendor().equalsIgnoreCase(vendor)){
-                    custom.add(transaction);
+            for (int i = 0; i < custom.size(); i++){
+                if (!custom.get(i).getVendor().equalsIgnoreCase(vendor)){
+                    custom.remove(custom.get(i));
+                    i--;
                 }
             }
         }
 
         if (!(amount == 0.0)){
-            for (Transaction transaction : ledger){
-                if (transaction.getAmount() == amount){
-                    custom.add(transaction);
+            for (int i = 0; i < custom.size(); i++){
+                if (!(custom.get(i).getAmount() == amount)){
+                    custom.remove(custom.get(i));
+                    i--;
                 }
             }
         }
