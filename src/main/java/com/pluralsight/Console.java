@@ -1,5 +1,7 @@
 package com.pluralsight;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -56,6 +58,7 @@ public class Console {
         while(true){
             try{
                 result =  scanner.nextInt();
+                scanner.nextLine();
                 return result;
             }
             catch (InputMismatchException e){

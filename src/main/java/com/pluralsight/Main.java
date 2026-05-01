@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -45,6 +46,7 @@ public class Main {
                     System.out.println("Have a nice day!");
                     return;
                 }
+                default -> System.out.println("Invalid Input. Please try again.");
             }
         }
     }
@@ -113,13 +115,14 @@ public class Main {
                     System.out.println("Going back to Home Screen\n");
                     return;
                 }
+                default -> System.out.println("Invalid Input. Please try again.");
             }
         }
     }
 
     public static void allEntries(ArrayList<Transaction> ledger){
         ArrayList<Transaction> newestLedger = new ArrayList<Transaction>();
-        newestLedger = ledger;
+        newestLedger = new ArrayList<>(ledger);
         Collections.reverse(newestLedger);
         for (Transaction transaction : newestLedger ){
             transaction.printInfo();
@@ -153,7 +156,6 @@ public class Main {
     }
 
     public static void reportsScreen(ArrayList<Transaction> ledger){
-        Scanner scanner = new Scanner(System.in);
         while (true){
 
             System.out.print("-----Reports Screen-----\n\n\t" +
@@ -163,10 +165,8 @@ public class Main {
                     "4) Previous Year\n\t" +
                     "5) Search by Vendor\n\t" +
                     "6) Custom Search\n\t" +
-                    "0) Back\n\n" +
-                    "Choose an option: ");
-            int command = scanner.nextInt();
-            scanner.nextLine();
+                    "0) Back\n\n");
+            int command = Console.promptForInt("Choose an option: ");
             switch (command) {
                 case 1 -> monthToDate(ledger);
                 case 2 -> previousMonth(ledger);
@@ -178,6 +178,7 @@ public class Main {
                     System.out.println("Going back to Ledger Screen\n");
                     return;
                 }
+                default -> System.out.println("Invalid Input. Please try again.");
             }
         }
     }
@@ -250,11 +251,16 @@ public class Main {
         for (Transaction transaction : vendorList){
             transaction.printInfo();
         }
+        if (vendorList.isEmpty()){
+            System.out.println("Looks like there is no transaction with that vendor.");
+        }
     }
 
     public static void customSearch(ArrayList<Transaction> ledger){
         String startDate = Console.promptForString("What is the start date? (yyyy-mm-dd) ");
+        dateCheck(startDate);
         String endDate = Console.promptForString("What is the end date? (yyyy-mm-dd) ");
+        dateCheck(endDate);
         String description = Console.promptForString("What is the description? ");
         String vendor = Console.promptForString("What is the vendor? ");
         String amount = Console.promptForString("What is the amount? ");
@@ -316,6 +322,9 @@ public class Main {
         for ( Transaction transaction : custom){
             transaction.printInfo();
         }
+        if (custom.isEmpty()){
+            System.out.println("Looks like there isn't anything that matches your filters. Try broadening your search.");
+        }
 
     }
 
@@ -332,6 +341,23 @@ public class Main {
 
         } catch (Exception e) {
             System.out.println("ERROR: Can't find the file");
+        }
+    }
+
+    public static void dateCheck(String stringDate){
+        Scanner scanner = new Scanner(System.in);
+        if (stringDate.isBlank()){
+            return;
+        }
+        while (true){
+            try {
+                LocalDate date = LocalDate.parse(stringDate);
+                break;
+
+            } catch (DateTimeParseException e){
+                System.out.println("Date not in correct format, please try again. (yyyy-mm-dd) ");
+                stringDate = scanner.nextLine();
+            }
         }
     }
 
