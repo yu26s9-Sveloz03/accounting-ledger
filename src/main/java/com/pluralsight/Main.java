@@ -258,9 +258,19 @@ public class Main {
 
     public static void customSearch(ArrayList<Transaction> ledger){
         String startDate = Console.promptForString("What is the start date? (yyyy-mm-dd) ");
-        dateCheck(startDate);
+        startDate = dateCheck(startDate);
         String endDate = Console.promptForString("What is the end date? (yyyy-mm-dd) ");
-        dateCheck(endDate);
+        endDate = dateCheck(endDate);
+        if (!startDate.isBlank() && !endDate.isBlank()){
+            while (true){
+                if (LocalDate.parse(endDate).isBefore(LocalDate.parse(startDate))) {
+                    endDate = Console.promptForString("End date can't be before the start date. Please try again. (yyyy-mm-dd) ");
+                    endDate = dateCheck(endDate);
+                } else {
+                    break;
+                }
+            }
+        }
         String description = Console.promptForString("What is the description? ");
         String vendor = Console.promptForString("What is the vendor? ");
         String amount = Console.promptForString("What is the amount? ");
@@ -344,15 +354,15 @@ public class Main {
         }
     }
 
-    public static void dateCheck(String stringDate){
+    public static String dateCheck(String stringDate){
         Scanner scanner = new Scanner(System.in);
         if (stringDate.isBlank()){
-            return;
+            return stringDate;
         }
         while (true){
             try {
                 LocalDate date = LocalDate.parse(stringDate);
-                break;
+                return stringDate;
 
             } catch (DateTimeParseException e){
                 System.out.println("Date not in correct format, please try again. (yyyy-mm-dd) ");
