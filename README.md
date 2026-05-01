@@ -13,6 +13,9 @@ This accounting ledger is a CLI application that can track all financial transac
       <img width="302" height="306" alt="image" src="https://github.com/user-attachments/assets/93ffa8b5-99bf-41a5-b848-dd8c2b0e2942" />
       
 - Holds all transactions in a CSV file
+  - Each transaction has the date, time, description of the transaction, the vendor, and the amount (positive numbers for deposits, and negative numbers for payments)
+     <img width="530" height="109" alt="image" src="https://github.com/user-attachments/assets/4a963870-d04c-47da-9fbf-ea24956dcdc6" />
+
 - Has functionality that can add deposits and payments
 - Has options to display transactions with multiple filters and search options
 
